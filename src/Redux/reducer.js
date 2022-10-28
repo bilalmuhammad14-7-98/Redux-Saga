@@ -16,6 +16,6 @@ export const cartData = (data = [], action) => {
       console.log("empty cart reducer", action);
       return [...data];
     default:
-      return [];
+      return data;
   }
 };
