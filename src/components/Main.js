@@ -1,5 +1,5 @@
 import "../App";
-
+import { useEffect } from "react";
 import { addToCart, removeToCart, emptyCart } from "../Redux/action";
 import { productList } from "../Redux/productAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,30 +9,13 @@ function Main() {
   console.log(data, "main page data");
 
   const dispatch = useDispatch();
-  const product = {
-    name: "iphone",
-    category: "mobile",
-    price: 10000,
-    color: "red",
-  };
+
+  useEffect(() => {
+    dispatch(productList());
+  }, []);
 
   return (
     <div>
-      <button
-        onClick={() => {
-          dispatch(addToCart(product));
-        }}
-      >
-        Add to cart
-      </button>
-
-      <button
-        onClick={() => {
-          dispatch(removeToCart(product.name));
-        }}
-      >
-        Remove to cart
-      </button>
       <button
         onClick={() => {
           dispatch(emptyCart());
@@ -40,13 +23,27 @@ function Main() {
       >
         Empty cart
       </button>
-      <button
-        onClick={() => {
-          dispatch(productList());
-        }}
-      >
-        Call Product List
-      </button>
+
+      <div className="product-container">
+        {data.map((item) => (
+          <div key={item.id} className="product-item">
+            <img src={item.photo} />
+            <div>Name : {item.name} </div>
+            <div>Color : {item.color} </div>
+            <div>Price : {item.price} </div>
+            <div>Category : {item.category} </div>
+            <div>Brand : {item.brand} </div>
+            <div>
+              <button onClick={() => dispatch(addToCart(item))}>
+                Add to Cart
+              </button>
+              <button onClick={() => dispatch(removeToCart(item.id))}>
+                Remove to Cart
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
