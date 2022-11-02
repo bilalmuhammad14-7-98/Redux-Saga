@@ -5,6 +5,7 @@ import { addToCart, removeToCart, emptyCart } from "../Redux/action";
 import { productList } from "../Redux/productAction";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../Redux/userAction";
+import { addProduct } from "../Redux/addProductAction";
 
 function Main() {
   const [userData, setUserData] = useState();
@@ -34,6 +35,14 @@ function Main() {
     id: 1,
   };
 
+  let postData = {
+    name: "Mac Book",
+    color: "black",
+    price: 20000,
+    category: "Laptop",
+    brand: "Apple",
+  };
+
   return (
     <div>
       <button
@@ -45,6 +54,9 @@ function Main() {
       </button>
 
       <button onClick={() => dispatch(getUsers(idData))}>Get User Data</button>
+      <button onClick={() => dispatch(addProduct(postData))}>
+        Add Product
+      </button>
       {loading ? <>loading.....</> : null}
       {error != null ? <>Network Error</> : null}
       {/* {} */}
