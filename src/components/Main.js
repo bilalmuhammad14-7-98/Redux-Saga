@@ -1,18 +1,38 @@
 import "../App";
+import { useState } from "react";
 import { useEffect } from "react";
 import { addToCart, removeToCart, emptyCart } from "../Redux/action";
 import { productList } from "../Redux/productAction";
 import { useDispatch, useSelector } from "react-redux";
+import { getUsers } from "../Redux/userAction";
 
 function Main() {
+  const [userData, setUserData] = useState();
   const data = useSelector((state) => state.productData);
+  const user = useSelector((state) => {
+    // console.log(state.users.users.results, "user data");
+    return state.users.users;
+  });
+
+  const loading = useSelector((state) => state.users.loading);
+  const error = useSelector((state) => {
+    console.log(state.users, "errorrrrrrrrrrrr");
+    return state.users.error;
+  });
   console.log(data, "main page data");
+  console.log(user, "users data");
+  console.log(loading, "loading state");
+  console.log(error, "error");
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(productList());
-  }, []);
+    setUserData(user.results);
+  }, [user, loading, error]);
+
+  let idData = {
+    id: 1,
+  };
 
   return (
     <div>
@@ -23,6 +43,25 @@ function Main() {
       >
         Empty cart
       </button>
+
+      <button onClick={() => dispatch(getUsers(idData))}>Get User Data</button>
+      {loading ? <>loading.....</> : null}
+      {error != null ? <>Network Error</> : null}
+      {/* {} */}
+      <div className="product-container">
+        {userData ? (
+          <>
+            {" "}
+            {userData.map((item) => (
+              <div key={item.id.value} className="product-item">
+                <img src={item.picture.large} />
+                <div>Name : {item.name.first} </div>
+                <div>Gender : {item.gender} </div>
+              </div>
+            ))}
+          </>
+        ) : null}
+      </div>
 
       <div className="product-container">
         {data.map((item) => (
